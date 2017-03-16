@@ -1,19 +1,12 @@
 <?php
 
-class Ins extends CI_Controller {
+class Ins extends MY_Controller {
 	function __construct(){
 
 		parent::__construct();
-		$this->load->helper('url');
-		$config['tag_open'] = '<ul class="breadcrumb">';
-		$config['tag_close'] = '</ul>';
-		$config['li_open'] = '<li>';
-		$config['li_close'] = '</li>';
-		$config['divider'] = '<span class="divider"> » </span>';
-		$this->breadcrumb->initialize($config);
-		no_access();
-		levelsuper();
+		$this->load->model('M_desa');
 	}
+
 	public function index()
 	{
 		$data=array(
@@ -26,17 +19,19 @@ class Ins extends CI_Controller {
 		$this->breadcrumb->append_crumb('Manajemen Desa', site_url('ins'));
 		$this->load->view('admin/templatedash',$data);
 	}
+
 	public function add()
 	{
-		$data=array(
-			"desa"=>strtoupper($_POST['desa']),
-			"kecamatan"=>strtoupper($_POST['kecamatan']),
-			"kabupaten"=>strtoupper($_POST['kabupaten']),
-			"kepala_desa"=>strtoupper($_POST['kepala_desa']),
-		);
-		$this->db->query('delete from desa where 1=1');
-		$this->db->insert('desa', $data);
-		$this->session->set_flashdata('sukses', 'Data Berhasil Di Update');
+		$id = $_POST['id_desa'];;
+		$data['desa'] 			= $_POST['desa'];
+		$data['kecamatan'] 		= $_POST['kecamatan'];
+		$data['kabupaten'] 		= $_POST['kabupaten'];
+		$data['kepala_desa'] 	= $_POST['kepala_desa'];
+		$this->M_desa->save($data,$id); // model untuk edit data
+		$this->session->set_flashdata('sukses',"Data Berhasil Diupdate");
 		redirect('Ins');
 	}
+
+
+
 }

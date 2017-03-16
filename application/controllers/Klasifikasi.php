@@ -4,18 +4,9 @@ class Klasifikasi extends CI_Controller {
 	function __construct(){
 
 		parent::__construct();
-		$this->load->helper('url');
-		$config['tag_open'] = '<ul class="breadcrumb">';
-		$config['tag_close'] = '</ul>';
-		$config['li_open'] = '<li>';
-		$config['li_close'] = '</li>';
-		$config['divider'] = '<span class="divider"> » </span>';
-		$this->breadcrumb->initialize($config);
 		$this->load->model('M_klasifikasi');
-		$this->load->helper('form');
-		no_access();
-		levelsuper();
 	}
+
 	public function index()
 	{
 		$data=array(
@@ -28,53 +19,33 @@ class Klasifikasi extends CI_Controller {
 		$this->breadcrumb->append_crumb('Klasifikasi', site_url('klasifikasi'));
 		$this->load->view('admin/template',$data);
 	}
+
 	public function add()
-	{
-		$this->form_validation->set_rules('id', 'id', 'required');
-		$this->form_validation->set_rules('klasifikasi', 'klasifikasi', 'required');
-		if($this->form_validation->run()==FALSE){
-			$this->session->set_flashdata('error',"Data Anda Gagal Di Inputkan");
-			redirect('klasifikasi');
-		}else{
-			$data=array(
-				"id_klasifikasi"=>$_POST['id'],
-				"klasifikasi"=>$_POST['klasifikasi'],
-				"status"=>1,
-			);
-			$this->db->insert('klasifikasi',$data);
-			$this->session->set_flashdata('sukses',"Data Berhasil Disimpan");
-			redirect('klasifikasi');
-		}
+	{	
+		$data['klasifikasi'] = $_POST['klasifikasi'];
+		$data['status'] = 1;
+		$this->M_klasifikasi->save($data, NULL); // model untuk add data
+		$this->session->set_flashdata('sukses',"Data Berhasil Disimpan");
+		redirect('Klasifikasi');
 	}
+
 	public function edit()
 	{
-		$this->form_validation->set_rules('id', 'id', 'required');
-		$this->form_validation->set_rules('klasifikasi', 'klasifikasi', 'required');
-		if($this->form_validation->run()==FALSE){
-			$this->session->set_flashdata('error',"Data Anda Gagal Di Edit");
-			redirect('klasifikasi');
-		}else{
-			$data=array(
-				"klasifikasi"=>$_POST['klasifikasi'],
-			);
-			$this->db->where('id_klasifikasi', $_POST['id']);
-			$this->db->update('klasifikasi',$data);
-			$this->session->set_flashdata('sukses',"Data Berhasil Diedit");
-			redirect('klasifikasi');
-		}
+		$id = $_POST['id'];;
+		$data['klasifikasi'] = $_POST['klasifikasi'];
+		$this->M_klasifikasi->save($data,$id); // model untuk edit data
+		$this->session->set_flashdata('sukses',"Data Berhasil Diedit");
+		redirect('Klasifikasi');
 	}
+
 	public function hapus($id)
 	{
-		if($id==""){
-			$this->session->set_flashdata('error',"Data Anda Gagal Di Hapus");
-			redirect('klasifikasi');
-		}else{
-			$this->db->where('id_klasifikasi', $id);
-			$this->db->delete('klasifikasi');
-			$this->session->set_flashdata('sukses',"Data Berhasil Dihapus");
-			redirect('klasifikasi');
-		}
+		$this->M_klasifikasi->delete($id); // model untuk delete data
+		$this->session->set_flashdata('sukses',"Data Berhasil Dihapus"); // menampilkan notifikasi
+		redirect('Klasifikasi');
 	}
+
+	
 	public function detail($id)
 	{
 		$getrow=$this->M_klasifikasi->getrow($id)->row_array();

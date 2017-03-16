@@ -1,4 +1,5 @@
 <?php 
+
 class Entry extends CI_Controller {
 	function __construct(){
 

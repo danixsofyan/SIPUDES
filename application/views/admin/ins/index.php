@@ -43,6 +43,7 @@ if($data2!=""){ ?>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h6 class="modal-title"><strong>Update Data</strong></h6>
         </div>
+        <input type="hidden" name="id_desa" value="<?php echo $getrow['id_desa']; ?>">
         <div class="modal-body">
           <div class="form-group">
             <label class='col-md-3'>Desa</label>

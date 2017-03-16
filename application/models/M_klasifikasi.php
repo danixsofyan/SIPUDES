@@ -1,6 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class M_klasifikasi extends CI_Model {
+class M_klasifikasi extends MY_Model {
+
+	protected $_table_name = 'klasifikasi';
+	protected $_primary_key = 'id_klasifikasi';
 
 	public function getrow($id)
 	{
